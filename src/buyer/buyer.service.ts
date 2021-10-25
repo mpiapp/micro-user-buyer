@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { VendorUserRegisterDTO } from './dto/vendor-user-register.dto';
-import { VendorUser, VendorUserDocument } from './schema/vendor.schema';
+import { BuyerUserRegisterDTO } from './dto/buyer-user-register.dto';
+import { BuyerUser, BuyerUserDocument } from './schema/buyer.schema';
 import * as requester from 'axios';
 import * as dotenv from 'dotenv';
-import { VendorUserCreateDTO } from './dto/vendor-user-create.dto';
+import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
 import { UserEmailDTO } from './dto/user-email.dto';
 
 dotenv.config();
@@ -13,22 +13,22 @@ dotenv.config();
 @Injectable()
 export class VendorService {
 
-    constructor( @InjectModel(VendorUser.name) private readonly vendorModel:Model<VendorUserDocument> ) {}
+    constructor( @InjectModel(BuyerUser.name) private readonly buyerModel:Model<BuyerUserDocument> ) {}
 
-    async registerCreate( user: VendorUserCreateDTO ): Promise<any> {
-        return this.vendorModel.create(user)
+    async registerCreate( user: BuyerUserCreateDTO ): Promise<any> {
+        return this.buyerModel.create(user)
     }
 
-    async register(body: VendorUserRegisterDTO): Promise<any> {
+    async register(body: BuyerUserRegisterDTO): Promise<any> {
         const headersRequest = {
             'Content-Type': process.env.application_json,
             'Accept': process.env.application_json,
         };
 
         try {
-            const registeredUser = await requester.default.post(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/dbconnections/signup`, {
-                client_id: process.env.AUTH0_VENDORUSER_CLIENT_ID,
-                connection: process.env.AUTH0_VENDORUSER_CONNECTION,
+            const registeredUser = await requester.default.post(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/dbconnections/signup`, {
+                client_id: process.env.AUTH0_BUYERUSER_CLIENT_ID,
+                connection: process.env.AUTH0_BUYERUSER_CONNECTION,
                 email: body.email, 
                 password: body.password
             }, { headers: headersRequest })
@@ -41,13 +41,13 @@ export class VendorService {
         }
     }
 
-    async login(body: VendorUserRegisterDTO): Promise<any> {
+    async login(body: BuyerUserRegisterDTO): Promise<any> {
         try {
-            let loginedUser = await requester.default.post(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/oauth/token`, {
-                client_id: process.env.AUTH0_VENDORUSER_CLIENT_ID,
-                connection: process.env.AUTH0_VENDORUSER_CONNECTION,
-                scope: process.env.AUTH0_VENDORUSER_SCOPE,
-                grant_type: process.env.AUTH0_VENDORUSER_GRANT_TYPE,
+            let loginedUser = await requester.default.post(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/oauth/token`, {
+                client_id: process.env.AUTH0_BUYERUSER_CLIENT_ID,
+                connection: process.env.AUTH0_BUYERUSER_CONNECTION,
+                scope: process.env.AUTH0_BUYERUSER_SCOPE,
+                grant_type: process.env.AUTH0_BUYERUSER_GRANT_TYPE,
                 username: body.email, 
                 password: body.password
             })
@@ -68,7 +68,7 @@ export class VendorService {
         try {
             let token = headers["token"]
             const options = { headers: { Authorization: `Bearer ${token}` } }
-            await requester.default.post(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/userinfo`, null, options)
+            await requester.default.post(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/userinfo`, null, options)
 
             /* istanbul ignore next */      // ignored for automatic give access to user
             return { message: 'Authorized' }
@@ -81,11 +81,11 @@ export class VendorService {
     async changePassword(email: UserEmailDTO): Promise<any> {
 
         const payload = {
-            client_id: process.env.AUTH0_VENDORUSER_CLIENT_ID,
-            connection: process.env.AUTH0_VENDORUSER_CONNECTION,
+            client_id: process.env.AUTH0_BUYERUSER_CLIENT_ID,
+            connection: process.env.AUTH0_BUYERUSER_CONNECTION,
             email: email['email'],
         }
-        await requester.default.post(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/dbconnections/change_password`, payload)
+        await requester.default.post(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/dbconnections/change_password`, payload)
         return { message: 'Link for password change sent to email' }
     }
     

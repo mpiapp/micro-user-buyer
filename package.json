@@ -84,8 +84,8 @@
       "authz.module.ts",
       "app.module.ts",
       "main.ts",
-      "vendor.module.ts",
-      "vendor-user-create.dto.ts"
+      "buyer.module.ts",
+      "buyer-user-create.dto.ts"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AdminModule } from './vendor/vendor.module';
+import { AdminModule } from './buyer/buyer.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthzModule } from './authz/authz.module';
 import * as dotenv from 'dotenv';

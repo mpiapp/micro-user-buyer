@@ -1,9 +1,9 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { VendorController } from './vendor.controller';
-import { VendorService } from './vendor.service';
-import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/vendor-payload.mock';
-import { VendorUser } from './schema/vendor.schema';
+import { VendorController } from './buyer.controller';
+import { VendorService } from './buyer.service';
+import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
+import { BuyerUser } from './schema/buyer.schema';
 
 describe('VendorController', () => {
   let controller: VendorController;
@@ -12,7 +12,7 @@ describe('VendorController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [VendorController],
       providers: [VendorService,{
-        provide: getModelToken(VendorUser.name),
+        provide: getModelToken(BuyerUser.name),
         useValue: {}        // will be filled with mocks for common CRUD
       }, 
     ]

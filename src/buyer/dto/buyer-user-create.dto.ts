@@ -2,7 +2,7 @@ import { Prop } from "@nestjs/mongoose"
 import { ApiProperty } from "@nestjs/swagger"
 import { IsIn, IsMongoId, IsOptional } from "class-validator"
 
-export class VendorUserCreateDTO {
+export class BuyerUserCreateDTO {
 
     @ApiProperty()
     @IsMongoId()
@@ -17,7 +17,7 @@ export class VendorUserCreateDTO {
 
     @ApiProperty()
     @Prop()
-    vendor_id: string
+    buyer_id: string
 
     @ApiProperty()
     @Prop()

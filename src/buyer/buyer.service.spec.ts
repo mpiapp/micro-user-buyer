@@ -1,12 +1,12 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { VendorService } from './vendor.service';
-import { VendorServiceMock } from './mocks/vendor-service.mock';
-import { VendorUser } from './schema/vendor.schema';
+import { VendorService } from './buyer.service';
+import { BuyerServiceMock } from './mocks/buyer-service.mock';
+import { BuyerUser } from './schema/buyer.schema';
 import * as requester from 'axios';
 import * as MockAdapter from 'axios-mock-adapter';
 import * as dotenv from 'dotenv';
-import { EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNoNumberPass, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, RegisterCreatePayload, RegisterCreatePayloadSuccess, TrueRegisterPayload } from './mocks/vendor-payload.mock';
+import { EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNoNumberPass, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, RegisterCreatePayload, RegisterCreatePayloadSuccess, TrueRegisterPayload } from './mocks/buyer-payload.mock';
 
 dotenv.config();
 
@@ -18,8 +18,8 @@ describe('VendorService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         VendorService, {
-          provide: getModelToken(VendorUser.name),
-          useValue: VendorServiceMock
+          provide: getModelToken(BuyerUser.name),
+          useValue: BuyerServiceMock
         },
         {
           provide: requester.default,
@@ -50,9 +50,9 @@ describe('VendorService', () => {
       email: body.email
   }
 
-    mock.onPost(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/dbconnections/signup`, {
-      client_id: process.env.AUTH0_VENDORUSER_CLIENT_ID,
-      connection: process.env.AUTH0_VENDORUSER_CONNECTION,
+    mock.onPost(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/dbconnections/signup`, {
+      client_id: process.env.AUTH0_BUYERUSER_CLIENT_ID,
+      connection: process.env.AUTH0_BUYERUSER_CONNECTION,
       email: body.email, 
       password: body.password
     }, {
@@ -90,11 +90,11 @@ describe('VendorService', () => {
       scope: expect.any(String)
     }
 
-    mock.onPost(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/oauth/token`, {
-      client_id: process.env.AUTH0_VENDORUSER_CLIENT_ID,
-      connection: process.env.AUTH0_VENDORUSER_CONNECTION,
-      scope: process.env.AUTH0_VENDORUSER_SCOPE,
-      grant_type: process.env.AUTH0_VENDORUSER_GRANT_TYPE,
+    mock.onPost(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/oauth/token`, {
+      client_id: process.env.AUTH0_BUYERUSER_CLIENT_ID,
+      connection: process.env.AUTH0_BUYERUSER_CONNECTION,
+      scope: process.env.AUTH0_BUYERUSER_SCOPE,
+      grant_type: process.env.AUTH0_BUYERUSER_GRANT_TYPE,
       username: body.email, 
       password: body.password
     }).reply(200, expectedResponse)
@@ -129,11 +129,11 @@ describe('VendorService', () => {
     let token = headers['token']
     let options = { Authorization: `Bearer 12345` }
     let expectedResponse = { message: 'Authorized' }
-    mock.onPost(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/userinfo`, null, { headers: `${options}` }).reply(200, expectedResponse)
+    mock.onPost(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/userinfo`, null, { headers: `${options}` }).reply(200, expectedResponse)
 
     await service.checkAccess(headers)
 
-    mock.onPost(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/userinfo`).reply((config) => {
+    mock.onPost(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/userinfo`).reply((config) => {
       expect(config.headers.Authorization).toEqual(`Bearer ${token}`);
       return [200, expectedResponse, {
         Authorization: `Bearer ${token}`,
@@ -147,9 +147,9 @@ describe('VendorService', () => {
   it(`should send change password link when requested`, async () => {
     const email = EmailPayload
     const expectedResponse = { message: 'Link for password change sent to email' }
-    mock.onPost(`https://${process.env.AUTH0_VENDORUSER_BASE_URL}/dbconnections/change_password`, {
-      client_id: process.env.AUTH0_VENDORUSER_CLIENT_ID,
-      connection: process.env.AUTH0_VENDORUSER_CONNECTION,
+    mock.onPost(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/dbconnections/change_password`, {
+      client_id: process.env.AUTH0_BUYERUSER_CLIENT_ID,
+      connection: process.env.AUTH0_BUYERUSER_CONNECTION,
       email: email['email'],
   }).reply(200, expectedResponse)
 
