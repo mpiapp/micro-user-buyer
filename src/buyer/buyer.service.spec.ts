@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { VendorService } from './buyer.service';
+import { BuyerService } from './buyer.service';
 import { BuyerServiceMock } from './mocks/buyer-service.mock';
 import { BuyerUser } from './schema/buyer.schema';
 import * as requester from 'axios';
@@ -10,14 +10,14 @@ import { EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNo
 
 dotenv.config();
 
-describe('VendorService', () => {
-  let service: VendorService;
+describe('BuyerService', () => {
+  let service: BuyerService;
   let mock = new MockAdapter.default(requester.default);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        VendorService, {
+        BuyerService, {
           provide: getModelToken(BuyerUser.name),
           useValue: BuyerServiceMock
         },
@@ -28,7 +28,7 @@ describe('VendorService', () => {
       ],
     }).compile();
 
-    service = module.get<VendorService>(VendorService);
+    service = module.get<BuyerService>(BuyerService);
   });
 
   it('should be defined', () => {

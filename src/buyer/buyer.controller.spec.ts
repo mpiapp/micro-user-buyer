@@ -1,24 +1,24 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { VendorController } from './buyer.controller';
-import { VendorService } from './buyer.service';
+import { BuyerController } from './buyer.controller';
+import { BuyerService } from './buyer.service';
 import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
 import { BuyerUser } from './schema/buyer.schema';
 
-describe('VendorController', () => {
-  let controller: VendorController;
+describe('BuyerController', () => {
+  let controller: BuyerController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [VendorController],
-      providers: [VendorService,{
+      controllers: [BuyerController],
+      providers: [BuyerService,{
         provide: getModelToken(BuyerUser.name),
         useValue: {}        // will be filled with mocks for common CRUD
       }, 
     ]
     }).compile();      
 
-    controller = module.get<VendorController>(VendorController);
+    controller = module.get<BuyerController>(BuyerController);
   });
 
   it('should be defined', () => {

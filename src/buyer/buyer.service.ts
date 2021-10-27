@@ -11,7 +11,7 @@ import { UserEmailDTO } from './dto/user-email.dto';
 dotenv.config();
 
 @Injectable()
-export class VendorService {
+export class BuyerService {
 
     constructor( @InjectModel(BuyerUser.name) private readonly buyerModel:Model<BuyerUserDocument> ) {}
 
