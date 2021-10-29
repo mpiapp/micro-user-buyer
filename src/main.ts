@@ -30,6 +30,6 @@ async function bootstrap() {
 
     SwaggerModule.setup('/api', app, document)
 
-  await app.listen( process.env.PORT || 3030 );
+  await app.listen( process.env.PORT || 3040 );
 }
 bootstrap();

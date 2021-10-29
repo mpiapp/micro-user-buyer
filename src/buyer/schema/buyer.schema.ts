@@ -3,10 +3,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsIn } from "class-validator";
 import { Document } from "mongoose";
 
-export type VendorUserDocument = VendorUser & Document;
+export type BuyerUserDocument = BuyerUser & Document;
 
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
-export class VendorUser {
+export class BuyerUser {
 
     @ApiProperty()
     @Prop()
@@ -18,7 +18,7 @@ export class VendorUser {
 
     @ApiProperty()
     @Prop()
-    vendor_id: string
+    buyer_id: string
 
     @ApiProperty()
     @Prop()
@@ -34,4 +34,4 @@ export class VendorUser {
     status: string
 }
 
-export const VendorUserSchema = SchemaFactory.createForClass(VendorUser)
+export const BuyerUserSchema = SchemaFactory.createForClass(BuyerUser)

@@ -1,24 +1,24 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { VendorController } from './vendor.controller';
-import { VendorService } from './vendor.service';
-import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/vendor-payload.mock';
-import { VendorUser } from './schema/vendor.schema';
+import { BuyerController } from './buyer.controller';
+import { BuyerService } from './buyer.service';
+import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
+import { BuyerUser } from './schema/buyer.schema';
 
-describe('VendorController', () => {
-  let controller: VendorController;
+describe('BuyerController', () => {
+  let controller: BuyerController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [VendorController],
-      providers: [VendorService,{
-        provide: getModelToken(VendorUser.name),
+      controllers: [BuyerController],
+      providers: [BuyerService,{
+        provide: getModelToken(BuyerUser.name),
         useValue: {}        // will be filled with mocks for common CRUD
       }, 
     ]
     }).compile();      
 
-    controller = module.get<VendorController>(VendorController);
+    controller = module.get<BuyerController>(BuyerController);
   });
 
   it('should be defined', () => {
@@ -44,7 +44,8 @@ describe('VendorController', () => {
 
   it(`should not register a user if all password lowercase (Controller)`, async function(){
     try {
-      await controller.register(FalseRegisterPayloadUppercasePass)
+      var test = await controller.register(FalseRegisterPayloadUppercasePass)
+      console.log(test)
     } catch (error) {
       expect(error).toBeDefined()
     }
