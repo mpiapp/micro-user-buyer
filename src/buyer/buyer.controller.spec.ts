@@ -44,7 +44,8 @@ describe('BuyerController', () => {
 
   it(`should not register a user if all password lowercase (Controller)`, async function(){
     try {
-      await controller.register(FalseRegisterPayloadUppercasePass)
+      var test = await controller.register(FalseRegisterPayloadUppercasePass)
+      console.log(test)
     } catch (error) {
       expect(error).toBeDefined()
     }
