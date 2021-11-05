@@ -6,7 +6,7 @@ import { BuyerUser } from './schema/buyer.schema';
 import * as requester from 'axios';
 import * as MockAdapter from 'axios-mock-adapter';
 import * as dotenv from 'dotenv';
-import { EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNoNumberPass, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, RegisterCreatePayload, RegisterCreatePayloadSuccess, TrueRegisterPayload } from './mocks/buyer-payload.mock';
+import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNoNumberPass, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, RegisterCreatePayload, RegisterCreatePayloadSuccess, TrueRegisterPayload } from './mocks/buyer-payload.mock';
 
 dotenv.config();
 
@@ -40,6 +40,14 @@ describe('BuyerService', () => {
     expect(await service.registerCreate(RegisterCreatePayload)).toEqual(RegisterCreatePayloadSuccess)
   })
 
+  it('should get list of buyers with queries', async () => {
+    expect(await service.find({ fullname:'test', buyer_id: '123' })).toEqual(ArrayOfObjectBuyers);
+  });
+
+  it('should get list of buyers with no queries', async () => {
+    expect(await service.find({})).toEqual(ArrayOfObjectBuyers);
+  });
+
   // register
   it(`should register a user & save to the database successfully`, async () => {
     const body = TrueRegisterPayload
@@ -63,19 +71,19 @@ describe('BuyerService', () => {
   })
   
   it(`should not register a user if password not contain uppercase`, async () => {
-    expect(await service.register(FalseRegisterPayloadLowercasePass)).toMatch('error')
+    expect(await service.register(FalseRegisterPayloadLowercasePass)).toEqual({"error": true})
   })
 
   it(`should not register a user if password not contain lowercase`, async () => {
-    expect(await service.register(FalseRegisterPayloadUppercasePass)).toMatch('error')
+    expect(await service.register(FalseRegisterPayloadUppercasePass)).toEqual({"error": true})
   })
 
   it(`should not register a user if password not contain number`, async () => {
-    expect(await service.register(FalseRegisterPayloadNoNumberPass)).toMatch('error')
+    expect(await service.register(FalseRegisterPayloadNoNumberPass)).toEqual({"error": true})
   })
 
   it(`should not register a user if password not contain alphabet`, async () => {
-    expect(await service.register(FalseRegisterPayloadOnlyNumberPass)).toMatch('error')
+    expect(await service.register(FalseRegisterPayloadOnlyNumberPass)).toEqual({"error": true})
   })
 
   // login
@@ -104,19 +112,19 @@ describe('BuyerService', () => {
   })
 
   it(`should not login a user if password not contain uppercase`, async () => {
-    expect(await service.login(FalseRegisterPayloadLowercasePass)).toMatch('error')
+    expect(await service.login(FalseRegisterPayloadLowercasePass)).toEqual({"error": true})
   })
 
   it(`should not login a user if password not contain lowercase`, async () => {
-    expect(await service.login(FalseRegisterPayloadUppercasePass)).toMatch('error')
+    expect(await service.login(FalseRegisterPayloadUppercasePass)).toEqual({"error": true})
   })
 
   it(`should not login a user if password not contain number`, async () => {
-    expect(await service.login(FalseRegisterPayloadNoNumberPass)).toMatch('error')
+    expect(await service.login(FalseRegisterPayloadNoNumberPass)).toEqual({"error": true})
   })
 
   it(`should not login a user if password not contain alphabet`, async () => {
-    expect(await service.login(FalseRegisterPayloadOnlyNumberPass)).toMatch('error')
+    expect(await service.login(FalseRegisterPayloadOnlyNumberPass)).toEqual({"error": true})
   })
 
   // check-access

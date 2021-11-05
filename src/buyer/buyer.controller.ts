@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UnauthorizedException, Headers } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { BuyerService } from './buyer.service';
 import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
@@ -18,19 +18,26 @@ export class BuyerController {
         const registeredUser = await this.buyerService.register(body)
 
         /* istanbul ignore next */      // ignored for automatic registering user
-        if( registeredUser !== 'error' ) {
+        if( !registeredUser.error ) {
+
+            let checked_company = await this.buyerService.find({ buyer_id: body['buyer_id'] ? body['buyer_id'] : "" })
+
             let userPayload: BuyerUserCreateDTO = {
                 auth_id: registeredUser['_id'] ? registeredUser['_id'] : "",
                 email: registeredUser['email'] ? registeredUser['email'] : "",
                 buyer_id: body['buyer_id'] ? body['buyer_id'] : "",
                 fullname: body['fullname'] ? body['fullname'] : "",
                 role_id: body['role_id'] ? body['role_id'] : "",
-                status: 'ACTIVE'
+                status: 'ACTIVE',
+                isOwner: checked_company.length ? false : true,
+                modules: body['modules'] ? body['modules'] : [],
+                features: body['features'] ? body['features'] : [],
+                capabilities: body['capabilities'] ? body['capabilities'] : [],
             }
             
             return this.buyerService.registerCreate(userPayload)
         }
-        throw new UnauthorizedException()
+        throw new UnauthorizedException(registeredUser.description)
     }
 
     @ApiOkResponse({ description: 'logined a user' })
@@ -41,7 +48,7 @@ export class BuyerController {
         const loginedUser = await this.buyerService.login(body)
 
         /* istanbul ignore next */      // ignored for automatic login user
-        if(loginedUser !== 'error') return loginedUser
+        if(!loginedUser.error) return loginedUser
         throw new UnauthorizedException()
     }
 
@@ -53,7 +60,7 @@ export class BuyerController {
         const checkedAccessUserResponse = await this.buyerService.checkAccess(headers)
 
          /* istanbul ignore next */      // ignored for automatic login user
-        if(checkedAccessUserResponse !== 'error') return checkedAccessUserResponse
+        if(checkedAccessUserResponse != 'error') return checkedAccessUserResponse
         throw new UnauthorizedException()
     }
 
@@ -64,5 +71,15 @@ export class BuyerController {
     @Post('change-password')
     async change_password(@Body() email: UserEmailDTO ): Promise<any> {
         return this.buyerService.changePassword(email)
+    }
+
+    @ApiOkResponse({ description: 'checked user access' })
+    @ApiBadRequestResponse({ description: 'False Request Payload' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+    @Get()
+    async fetch_buyers(
+        @Query() queries: any
+    ): Promise<any> {
+        return this.buyerService.find(queries)
     }
 }

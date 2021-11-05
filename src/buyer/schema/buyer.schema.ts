@@ -32,6 +32,23 @@ export class BuyerUser {
     @Prop()
     @IsIn(['ACTIVE', 'INACTIVE'])
     status: string
+
+    @ApiProperty()
+    @Prop()
+    @IsIn([true, false])
+    isOwner: Boolean
+
+    @ApiProperty()
+    @Prop()
+    modules: Array<String>
+
+    @ApiProperty()
+    @Prop()
+    features: Array<String>
+    
+    @ApiProperty()
+    @Prop()
+    capabilities: Array<String>
 }
 
 export const BuyerUserSchema = SchemaFactory.createForClass(BuyerUser)

@@ -2,7 +2,8 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BuyerController } from './buyer.controller';
 import { BuyerService } from './buyer.service';
-import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
+import { BuyerControllerMock } from './mocks/buyer-controller.mock';
+import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
 import { BuyerUser } from './schema/buyer.schema';
 
 describe('BuyerController', () => {
@@ -13,7 +14,7 @@ describe('BuyerController', () => {
       controllers: [BuyerController],
       providers: [BuyerService,{
         provide: getModelToken(BuyerUser.name),
-        useValue: {}        // will be filled with mocks for common CRUD
+        useValue: BuyerControllerMock
       }, 
     ]
     }).compile();      
@@ -24,6 +25,11 @@ describe('BuyerController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  // crud
+  it(`should get a list of buyers (Controller)`, async () => {
+    expect(await controller.fetch_buyers({})).toEqual(ArrayOfObjectBuyers)
+  })
 
   // register
   it(`should not register a user if all password number (Controller)`, async () => {
