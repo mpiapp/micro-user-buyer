@@ -32,6 +32,30 @@ export const RegisterCreatePayloadSuccess = {
     isOwner: true
 }
 
+export const SuccsessUpdateBuyer = (id) => {
+    return {
+        auth_id: id,
+        email: "test1234@gmail.com",
+        buyer_id: "123", 
+        fullname: "test", 
+        role_id: "00",
+        status: 'ACTIVE',
+        isOwner: true
+    }
+}
+
+export const SuccsessGetRoleByAuthId = (id) => {
+    return {
+        auth_id: id,
+        email: "test1234@gmail.com",
+        buyer_id: "123", 
+        fullname: "test", 
+        role_id: "00",
+        status: 'ACTIVE',
+        isOwner: true
+    }
+}
+
 export const ArrayOfObjectBuyers = [
     {
         id: "id1",

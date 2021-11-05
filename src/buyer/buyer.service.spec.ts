@@ -6,7 +6,7 @@ import { BuyerUser } from './schema/buyer.schema';
 import * as requester from 'axios';
 import * as MockAdapter from 'axios-mock-adapter';
 import * as dotenv from 'dotenv';
-import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNoNumberPass, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, RegisterCreatePayload, RegisterCreatePayloadSuccess, TrueRegisterPayload } from './mocks/buyer-payload.mock';
+import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadLowercasePass, FalseRegisterPayloadNoNumberPass, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, MockId, RegisterCreatePayload, RegisterCreatePayloadSuccess, StringMockId, SuccsessGetRoleByAuthId, SuccsessUpdateBuyer, TrueRegisterPayload } from './mocks/buyer-payload.mock';
 
 dotenv.config();
 
@@ -46,6 +46,14 @@ describe('BuyerService', () => {
 
   it('should get list of buyers with no queries', async () => {
     expect(await service.find({})).toEqual(ArrayOfObjectBuyers);
+  });
+
+  it('should update a buyer', async () => {
+    expect(await service.update(MockId,RegisterCreatePayload)).toEqual("");
+  });
+
+  it('should get a buyer', async () => {
+    expect(await service.findById(MockId)).toEqual("");
   });
 
   // register

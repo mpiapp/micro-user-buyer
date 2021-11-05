@@ -7,6 +7,8 @@ import * as requester from 'axios';
 import * as dotenv from 'dotenv';
 import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
 import { UserEmailDTO } from './dto/user-email.dto';
+import { IdDTO } from './dto/id.dto';
+import { UpdateBuyerUserDTO } from './dto/update-buyer-user.dto';
 
 dotenv.config();
 
@@ -20,8 +22,17 @@ export class BuyerService {
 
         q["fullname"] ? condition['fullname'] = { $regex: '.*' + q['fullname'] + '.*' } : {}
         q["buyer_id"] ? condition['buyer_id'] = q['buyer_id'] : {}
-        
+
         return this.buyerModel.find(condition)
+    }
+
+    async findById(id: IdDTO): Promise<BuyerUser> {
+        return this.buyerModel.findOne({auth_id: id.id})
+    }
+
+    async update(id: IdDTO, body: UpdateBuyerUserDTO ): Promise<BuyerUser> {
+        await this.buyerModel.findOneAndUpdate({auth_id: id.id}, body)
+        return this.findById(id)
     }
 
     async registerCreate( user: BuyerUserCreateDTO ): Promise<any> {
