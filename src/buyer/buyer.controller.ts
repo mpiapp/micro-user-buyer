@@ -1,8 +1,11 @@
-import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query, Param, Put, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { LoginCompanyOwnerAuthenticationGuard, LoginProfileAuthenticationGuard } from '../authz/authz.guard';
 import { BuyerService } from './buyer.service';
 import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
 import { BuyerUserRegisterDTO } from './dto/buyer-user-register.dto';
+import { IdDTO } from './dto/id.dto';
+import { UpdateBuyerUserDTO } from './dto/update-buyer-user.dto';
 import { UserEmailDTO } from './dto/user-email.dto';
 import { BuyerUser } from './schema/buyer.schema';
 
@@ -81,5 +84,28 @@ export class BuyerController {
         @Query() queries: any
     ): Promise<any> {
         return this.buyerService.find(queries)
+    }
+
+    @ApiOkResponse({ type: BuyerUser, description: 'get a buyer user by auth_id' })
+    @ApiBadRequestResponse({ description: 'False Request Payload' })
+    @ApiParam({ name: 'auth_id', required: true })
+    @UseGuards(LoginProfileAuthenticationGuard)
+    @Get(':auth_id')
+    async findById(
+        @Param('auth_id') id: IdDTO
+    ): Promise<BuyerUser> {
+        return this.buyerService.findById(id)
+    }
+
+    @ApiCreatedResponse({ type: BuyerUser, description: 'update a buyer user' })
+    @ApiBadRequestResponse({ description: 'False Request Payload' })
+    @ApiParam({ name: 'auth_id', required: true })
+    @UseGuards(LoginCompanyOwnerAuthenticationGuard)
+    @Put(':auth_id')
+    async update(
+        @Param('auth_id') id: IdDTO, 
+        @Body() body: UpdateBuyerUserDTO
+    ): Promise<BuyerUser> {
+        return this.buyerService.update(id, body)
     }
 }

@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BuyerController } from './buyer.controller';
 import { BuyerService } from './buyer.service';
 import { BuyerControllerMock } from './mocks/buyer-controller.mock';
-import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
+import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, MockId, RegisterCreatePayload, StringMockId, SuccsessGetRoleByAuthId, SuccsessUpdateBuyer } from './mocks/buyer-payload.mock';
 import { BuyerUser } from './schema/buyer.schema';
 
 describe('BuyerController', () => {
@@ -27,8 +27,16 @@ describe('BuyerController', () => {
   });
 
   // crud
-  it(`should get a list of buyers (Controller)`, async () => {
+  it(`should get a list of user-buyers (Controller)`, async () => {
     expect(await controller.fetch_buyers({})).toEqual(ArrayOfObjectBuyers)
+  })
+
+  it(`should update a user buyer (Controller)`, async () => {
+    expect(await controller.update(MockId, RegisterCreatePayload)).toEqual(SuccsessUpdateBuyer(StringMockId))
+  })
+
+  it(`should get a user buyer (Controller)`, async () => {
+    expect(await controller.findById(MockId)).toEqual(SuccsessGetRoleByAuthId(MockId))
   })
 
   // register

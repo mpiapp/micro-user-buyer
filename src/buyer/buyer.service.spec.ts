@@ -49,11 +49,11 @@ describe('BuyerService', () => {
   });
 
   it('should update a buyer', async () => {
-    expect(await service.update(MockId,RegisterCreatePayload)).toEqual("");
+    expect(await service.update(MockId,RegisterCreatePayload)).toEqual(SuccsessUpdateBuyer(StringMockId));
   });
 
   it('should get a buyer', async () => {
-    expect(await service.findById(MockId)).toEqual("");
+    expect(await service.findById(MockId)).toEqual(SuccsessGetRoleByAuthId(StringMockId));
   });
 
   // register

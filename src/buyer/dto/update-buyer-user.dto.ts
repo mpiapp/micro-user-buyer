@@ -11,31 +11,31 @@ export class UpdateBuyerUserDTO {
 
     @ApiProperty()
     @Prop()
+    @IsOptional()
     fullname?: string
 
     @ApiProperty()
     @Prop()
+    @IsOptional()
     role_id?: string
 
     @ApiProperty()
     @IsIn(['ACTIVE', 'INACTIVE'])
+    @IsOptional()
     status?: string
 
     @ApiProperty()
     @Prop()
-    @IsIn([true, false])
-    isOwner: Boolean
-
-    @ApiProperty()
-    @Prop()
+    @IsOptional()
     modules?: Array<String>
 
     @ApiProperty()
     @Prop()
+    @IsOptional()
     features?: Array<String>
     
     @ApiProperty()
     @Prop()
+    @IsOptional()
     capabilities?: Array<String>
-
 }

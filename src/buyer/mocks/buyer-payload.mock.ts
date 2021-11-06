@@ -34,7 +34,7 @@ export const RegisterCreatePayloadSuccess = {
 
 export const SuccsessUpdateBuyer = (id) => {
     return {
-        auth_id: id,
+        auth_id: id.auth_id,
         email: "test1234@gmail.com",
         buyer_id: "123", 
         fullname: "test", 
@@ -46,7 +46,7 @@ export const SuccsessUpdateBuyer = (id) => {
 
 export const SuccsessGetRoleByAuthId = (id) => {
     return {
-        auth_id: id,
+        auth_id: id.auth_id,
         email: "test1234@gmail.com",
         buyer_id: "123", 
         fullname: "test", 
