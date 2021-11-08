@@ -45,6 +45,9 @@ export class LoginCompanyOwnerAuthenticationGuard implements CanActivate {
       let profile_user = await this.buyerUserService.findById(auth_id)
       if( !profile_user.isOwner ) throw new UnauthorizedException('Not an owner')
 
+      req.headers['auth_id'] = auth_id
+      req.headers['buyer_company_id'] = profile_user['buyer_id']
+
       return true
     } catch (error) {
       throw new UnauthorizedException(error.response.message || 'Login Required')
@@ -77,9 +80,6 @@ export class LoginProfileAuthenticationGuard implements CanActivate {
 
       return true
     } catch (error) {
-
-      console.log(error)
-
       throw new UnauthorizedException(error.response.message || 'Login Required')
     }
   }

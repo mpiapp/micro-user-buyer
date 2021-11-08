@@ -86,6 +86,22 @@ export class BuyerController {
         return this.buyerService.find(queries)
     }
 
+    @ApiOkResponse({ description: 'checked user access' })
+    @ApiBadRequestResponse({ description: 'False Request Payload' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+    @UseGuards(LoginCompanyOwnerAuthenticationGuard)
+    @Get('company-owner')
+    async fetch_buyers_company_owner(
+        @Query() queries: any,
+        @Headers() headers: object
+    ): Promise<any> {
+
+        if( !headers['buyer_company_id'] ) throw new UnauthorizedException('Not an owner')
+        
+        queries['buyer_id'] = headers['buyer_company_id']
+        return this.buyerService.find(queries)
+    }
+
     @ApiOkResponse({ type: BuyerUser, description: 'get a buyer user by auth_id' })
     @ApiBadRequestResponse({ description: 'False Request Payload' })
     @ApiParam({ name: 'auth_id', required: true })

@@ -18,7 +18,7 @@ describe('BuyerController', () => {
       }, 
     ]
     }).compile();      
-
+    
     controller = module.get<BuyerController>(BuyerController);
   });
 
@@ -29,6 +29,24 @@ describe('BuyerController', () => {
   // crud
   it(`should get a list of user-buyers (Controller)`, async () => {
     expect(await controller.fetch_buyers({})).toEqual(ArrayOfObjectBuyers)
+  })
+
+  it(`should get a list of user-buyers company-owner (Controller)`, async () => {
+    let queries = {'buyer_id' : '123'}
+    let headers = { 'buyer_company_id': '123' }
+
+    expect(await controller.fetch_buyers_company_owner(queries, headers)).toEqual(ArrayOfObjectBuyers)
+  })
+
+  it(`should not get a list of user-buyers company-owner if buyer-id wrong (Controller)`, async () => {
+    let queries = {'buyer_id' : ''}
+    let headers = { 'buyer_company_id': '' }
+
+    try {
+      await await controller.fetch_buyers_company_owner(queries, headers)
+    } catch (error) {
+      expect(error).toBeDefined()
+    }
   })
 
   it(`should update a user buyer (Controller)`, async () => {
