@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query, Param, Put, UseGuards, SetMetadata } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { LoginCompanyOwnerAuthenticationGuard, LoginProfileAuthenticationGuard } from '../authz/authz.guard';
+import { BuyerGuards, LoginCompanyOwnerAuthenticationGuard, LoginProfileAuthenticationGuard } from '../authz/authz.guard';
 import { BuyerService } from './buyer.service';
 import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
 import { BuyerUserRegisterDTO } from './dto/buyer-user-register.dto';
