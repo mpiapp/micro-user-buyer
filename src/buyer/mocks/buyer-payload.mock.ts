@@ -16,7 +16,8 @@ export const RegisterCreatePayload = {
     buyer_id: "123", 
     fullname: "test", 
     role_id: "00",
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    isOwner: true
 }
 
 export const RegisterCreatePayloadSuccess = {
@@ -26,8 +27,66 @@ export const RegisterCreatePayloadSuccess = {
     buyer_id: "123", 
     fullname: "test", 
     role_id: "00",
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    isOwner: true
 }
+
+export const SuccsessUpdateBuyer = (id) => {
+    return {
+        auth_id: id.auth_id,
+        email: "test1234@gmail.com",
+        buyer_id: "123", 
+        fullname: "test", 
+        role_id: "00",
+        status: 'ACTIVE',
+        isOwner: true
+    }
+}
+
+export function SuccsessGetRoleByAuthId(auth_id){
+    return {
+        auth_id: auth_id.auth_id,
+        email: "test1234@gmail.com",
+        buyer_id: "123", 
+        fullname: "test", 
+        role_id: "00",
+        status: 'ACTIVE',
+        isOwner: true
+    }
+}
+
+export const ArrayOfObjectBuyers = [
+    {
+        id: "id1",
+        auth_id: "1234",
+        email: "test1234@gmail.com",
+        buyer_id: "123", 
+        fullname: "test", 
+        role_id: "00",
+        status: 'ACTIVE',
+        isOwner: true
+    },
+    {
+        id: "id2",
+        auth_id: "12345",
+        email: "test12345@gmail.com",
+        buyer_id: "1234", 
+        fullname: "test12", 
+        role_id: "001",
+        status: 'ACTIVE',
+        isOwner: false
+    },
+    {
+        id: "id3",
+        auth_id: "12341",
+        email: "test12341@gmail.com",
+        buyer_id: "1231", 
+        fullname: "test12", 
+        role_id: "002",
+        status: 'ACTIVE',
+        isOwner: false
+    }
+]
 
 export const TrueRegisterPayload = { email: 'test123@gmail.com', password: process.env.MOCK_PASSWORD, buyer_id: "123", fullname: "test", role_id: "00" }
 export const FalseRegisterPayloadLowercasePass = { email: 'test123@gmail.com', password: process.env.MOCK_PASSWORD_LOWERCASE, flag: 'BUYER', buyer_id: "123", fullname: "test", role_id: "00" }

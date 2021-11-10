@@ -7,6 +7,7 @@ import * as requester from 'axios';
 import * as dotenv from 'dotenv';
 import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
 import { UserEmailDTO } from './dto/user-email.dto';
+import { UpdateBuyerUserDTO } from './dto/update-buyer-user.dto';
 
 dotenv.config();
 
@@ -14,6 +15,24 @@ dotenv.config();
 export class BuyerService {
 
     constructor( @InjectModel(BuyerUser.name) private readonly buyerModel:Model<BuyerUserDocument> ) {}
+
+    async find(q): Promise<BuyerUser[]> {
+        let condition = {
+            fullname: q["fullname"] ? { $regex: '.*' + q['fullname'] + '.*' } : {},
+            buyer_id: q["buyer_id"] ? q['buyer_id'] : {}
+        }
+
+        return this.buyerModel.find(condition)
+    }
+
+    async findById(id: any): Promise<BuyerUser> {
+        return this.buyerModel.findOne({ auth_id: id })
+    }
+
+    async update(id: any, body: UpdateBuyerUserDTO ): Promise<BuyerUser> {
+        await this.buyerModel.findOneAndUpdate({auth_id: id}, body)
+        return this.findById(id)
+    }
 
     async registerCreate( user: BuyerUserCreateDTO ): Promise<any> {
         return this.buyerModel.create(user)
@@ -36,8 +55,8 @@ export class BuyerService {
             return registeredUser.data
 
         } catch (error) {
-            console.log(error.response.data)
-            return 'error'
+            // console.log(error.response.data)
+            return { error: true, ...error.response.data }
         }
     }
 
@@ -59,8 +78,8 @@ export class BuyerService {
             }
 
         } catch (error) {
-            console.log(error.response.data)
-            return 'error'
+            // console.log(error.response.data)
+            return { error: true, ...error.response.data }
         }
     }
 
@@ -73,7 +92,7 @@ export class BuyerService {
             /* istanbul ignore next */      // ignored for automatic give access to user
             return { message: 'Authorized' }
         } catch (error) {
-            // console.log(error.response.data))
+            // console.log(error.response.data)
             return 'error'
         }
     }

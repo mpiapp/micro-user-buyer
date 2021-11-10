@@ -2,7 +2,8 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BuyerController } from './buyer.controller';
 import { BuyerService } from './buyer.service';
-import { EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass } from './mocks/buyer-payload.mock';
+import { BuyerControllerMock } from './mocks/buyer-controller.mock';
+import { ArrayOfObjectBuyers, EmailPayload, FalseRegisterPayloadOnlyNumberPass, FalseRegisterPayloadUppercasePass, MockId, RegisterCreatePayload, StringMockId, SuccsessGetRoleByAuthId, SuccsessUpdateBuyer } from './mocks/buyer-payload.mock';
 import { BuyerUser } from './schema/buyer.schema';
 
 describe('BuyerController', () => {
@@ -13,17 +14,48 @@ describe('BuyerController', () => {
       controllers: [BuyerController],
       providers: [BuyerService,{
         provide: getModelToken(BuyerUser.name),
-        useValue: {}        // will be filled with mocks for common CRUD
+        useValue: BuyerControllerMock
       }, 
     ]
     }).compile();      
-
+    
     controller = module.get<BuyerController>(BuyerController);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  // crud
+  it(`should get a list of user-buyers (Controller)`, async () => {
+    expect(await controller.fetch_buyers({})).toEqual(ArrayOfObjectBuyers)
+  })
+
+  it(`should get a list of user-buyers company-owner (Controller)`, async () => {
+    let queries = {'buyer_id' : '123'}
+    let headers = { 'buyer_company_id': '123' }
+
+    expect(await controller.fetch_buyers_company_owner(queries, headers)).toEqual(ArrayOfObjectBuyers)
+  })
+
+  it(`should not get a list of user-buyers company-owner if buyer-id wrong (Controller)`, async () => {
+    let queries = {'buyer_id' : ''}
+    let headers = { 'buyer_company_id': '' }
+
+    try {
+      await await controller.fetch_buyers_company_owner(queries, headers)
+    } catch (error) {
+      expect(error).toBeDefined()
+    }
+  })
+
+  it(`should update a user buyer (Controller)`, async () => {
+    expect(await controller.update(MockId, RegisterCreatePayload)).toEqual(SuccsessUpdateBuyer(StringMockId))
+  })
+
+  it(`should get a user buyer (Controller)`, async () => {
+    expect(await controller.findById(MockId)).toEqual(SuccsessGetRoleByAuthId(MockId))
+  })
 
   // register
   it(`should not register a user if all password number (Controller)`, async () => {
