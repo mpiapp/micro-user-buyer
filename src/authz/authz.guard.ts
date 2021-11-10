@@ -100,7 +100,6 @@ export class BuyerGuards implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.getArgByIndex(0)
     const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : ""
-    const params = req.params
     let auth_id = ""
 
     const modulesArray = this.reflector.get<any>('modules', context.getHandler());

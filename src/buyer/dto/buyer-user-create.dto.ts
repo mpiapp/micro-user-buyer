@@ -34,18 +34,18 @@ export class BuyerUserCreateDTO {
     @ApiProperty()
     @Prop()
     @IsIn([true, false])
-    isOwner: Boolean
+    isOwner: boolean
 
     @ApiProperty()
     @Prop()
-    modules?: Array<String>
+    modules?: Array<string>
 
     @ApiProperty()
     @Prop()
-    features?: Array<String>
+    features?: Array<string>
     
     @ApiProperty()
     @Prop()
-    capabilities?: Array<String>
+    capabilities?: Array<string>
 
 }

@@ -1,4 +1,3 @@
-import { ApiPreconditionFailedResponse } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -44,9 +43,9 @@ export const SuccsessUpdateBuyer = (id) => {
     }
 }
 
-export const SuccsessGetRoleByAuthId = (id) => {
+export function SuccsessGetRoleByAuthId(auth_id){
     return {
-        auth_id: id.auth_id,
+        auth_id: auth_id.auth_id,
         email: "test1234@gmail.com",
         buyer_id: "123", 
         fullname: "test", 

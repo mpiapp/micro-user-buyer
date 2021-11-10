@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query, Param, Put, UseGuards, SetMetadata } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, Headers, Get, Query, Param, Put, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { BuyerGuards, LoginCompanyOwnerAuthenticationGuard, LoginProfileAuthenticationGuard } from '../authz/authz.guard';
+import { LoginCompanyOwnerAuthenticationGuard, LoginProfileAuthenticationGuard } from '../authz/authz.guard';
 import { BuyerService } from './buyer.service';
 import { BuyerUserCreateDTO } from './dto/buyer-user-create.dto';
 import { BuyerUserRegisterDTO } from './dto/buyer-user-register.dto';
@@ -23,19 +23,19 @@ export class BuyerController {
         /* istanbul ignore next */      // ignored for automatic registering user
         if( !registeredUser.error ) {
 
-            let checked_company = await this.buyerService.find({ buyer_id: body['buyer_id'] ? body['buyer_id'] : "" })
+            let checked_company = await this.buyerService.find({ buyer_id: body['buyer_id'] })
 
             let userPayload: BuyerUserCreateDTO = {
-                auth_id: registeredUser['_id'] ? registeredUser['_id'] : "",
-                email: registeredUser['email'] ? registeredUser['email'] : "",
-                buyer_id: body['buyer_id'] ? body['buyer_id'] : "",
-                fullname: body['fullname'] ? body['fullname'] : "",
-                role_id: body['role_id'] ? body['role_id'] : "",
-                status: 'ACTIVE',
-                isOwner: checked_company.length ? false : true,
+                auth_id: registeredUser['_id'],
+                email: registeredUser['email'],
+                buyer_id: body['buyer_id'],
+                fullname: body['fullname'],
+                role_id: body['role_id'],
                 modules: body['modules'] ? body['modules'] : [],
                 features: body['features'] ? body['features'] : [],
                 capabilities: body['capabilities'] ? body['capabilities'] : [],
+                status: 'ACTIVE',
+                isOwner: checked_company.length ? false : true,
             }
             
             return this.buyerService.registerCreate(userPayload)

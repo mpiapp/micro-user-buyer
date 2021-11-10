@@ -27,15 +27,15 @@ export class UpdateBuyerUserDTO {
     @ApiProperty()
     @Prop()
     @IsOptional()
-    modules?: Array<String>
+    modules?: Array<string>
 
     @ApiProperty()
     @Prop()
     @IsOptional()
-    features?: Array<String>
+    features?: Array<string>
     
     @ApiProperty()
     @Prop()
     @IsOptional()
-    capabilities?: Array<String>
+    capabilities?: Array<string>
 }

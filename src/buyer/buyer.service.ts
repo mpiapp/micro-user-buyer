@@ -17,10 +17,10 @@ export class BuyerService {
     constructor( @InjectModel(BuyerUser.name) private readonly buyerModel:Model<BuyerUserDocument> ) {}
 
     async find(q): Promise<BuyerUser[]> {
-        let condition = {}
-
-        q["fullname"] ? condition['fullname'] = { $regex: '.*' + q['fullname'] + '.*' } : {}
-        q["buyer_id"] ? condition['buyer_id'] = q['buyer_id'] : {}
+        let condition = {
+            fullname: q["fullname"] ? { $regex: '.*' + q['fullname'] + '.*' } : {},
+            buyer_id: q["buyer_id"] ? q['buyer_id'] : {}
+        }
 
         return this.buyerModel.find(condition)
     }
