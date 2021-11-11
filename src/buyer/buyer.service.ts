@@ -87,10 +87,24 @@ export class BuyerService {
         try {
             let token = headers["token"]
             const options = { headers: { Authorization: `Bearer ${token}` } }
-            await requester.default.post(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/userinfo`, null, options)
+            var auth0_response = await requester.default.post(`https://${process.env.AUTH0_BUYERUSER_BASE_URL}/userinfo`, null, options)
 
+            /* istanbul ignore next */
+            var db_data = await this.findById(auth0_response.data.sub.split('|')[1])
+            
             /* istanbul ignore next */      // ignored for automatic give access to user
-            return { message: 'Authorized' }
+            return { 
+                fullname: db_data.fullname,
+                email: db_data.email,
+                buyer_id: db_data.buyer_id,
+                role_id: db_data.role_id,
+                status: db_data.status,
+                modules: db_data.modules,
+                message: 'Authorized',
+                email_verified: auth0_response.data.email_verified,
+                auth_id: auth0_response.data.sub.split('|')[1],
+                avatar: auth0_response.data.picture
+            }
         } catch (error) {
             // console.log(error.response.data)
             return 'error'
