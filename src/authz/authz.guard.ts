@@ -22,6 +22,7 @@ export class LoginAuthenticationGuard implements CanActivate {
       await checkAccess({ headers: { Authorization: `Bearer ${token}` } })
       return true
     } catch (error) {
+      if( error && error.response && error.response.message ) throw new UnauthorizedException(error.response.message || 'Login Required')
       throw new UnauthorizedException('Login Required')
     }
   }
@@ -51,7 +52,8 @@ export class LoginCompanyOwnerAuthenticationGuard implements CanActivate {
 
       return true
     } catch (error) {
-      throw new UnauthorizedException(error.response.message || 'Login Required')
+      if( error && error.response && error.response.message ) throw new UnauthorizedException(error.response.message || 'Login Required')
+      throw new UnauthorizedException('Login Required')
     }
   }
 
@@ -81,7 +83,8 @@ export class LoginProfileAuthenticationGuard implements CanActivate {
 
       return true
     } catch (error) {
-      throw new UnauthorizedException(error.response.message || 'Login Required')
+      if( error && error.response && error.response.message ) throw new UnauthorizedException(error.response.message || 'Login Required')
+      throw new UnauthorizedException('Login Required')
     }
   }
 
@@ -126,7 +129,8 @@ export class BuyerGuards implements CanActivate {
 
       return true
     } catch (error) {
-      throw new UnauthorizedException(error.response.message || 'Login Required')
+      if( error && error.response && error.response.message ) throw new UnauthorizedException(error.response.message || 'Login Required')
+      throw new UnauthorizedException('Login Required')
     }
   }
 
