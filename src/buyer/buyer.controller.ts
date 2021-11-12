@@ -40,7 +40,7 @@ export class BuyerController {
             
             return this.buyerService.registerCreate(userPayload)
         }
-        throw new UnauthorizedException(registeredUser.description)
+        throw new UnauthorizedException(registeredUser)
     }
 
     @ApiOkResponse({ description: 'logined a user' })
@@ -52,7 +52,7 @@ export class BuyerController {
 
         /* istanbul ignore next */      // ignored for automatic login user
         if(!loginedUser.error) return loginedUser
-        throw new UnauthorizedException()
+        throw new UnauthorizedException(loginedUser)
     }
 
     @ApiOkResponse({ description: 'checked user access' })
